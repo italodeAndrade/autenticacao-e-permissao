@@ -1,8 +1,25 @@
 #Ítalo de Andrade Teles Ocimar Lima
+import time
 import os
 import getpass
+
+def excluir_arquivo():
+
+    listar_arquivo()
+    nome_arquivo=input("insira o nome do arquivo que deseja excluir: ")
+    print("=-=-=-=-=-=-=-=-=-=") 
+    caminho_arquivo=os.path.join("arquivos",nome_arquivo)
+    if os.path.exists(caminho_arquivo):
+        os.remove(caminho_arquivo)
+        print("!!!Arquivo excluído com sucesso!!!")
+        print("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= \n")
+    else:
+        print("O arquivo não existe ou não pode ser encontrado.")
+        print("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= \n")
+
 def listar_arquivo():
-    path=r"C:\Users\italo\Desktop\programação\segundo ano\cyber segurança\somativa\autenticacao-e-permissao\m1\arquivos"
+
+    path=r"arquivos"
     if os.path.isdir(path):
 
         conteudo = os.listdir(path)
@@ -10,12 +27,26 @@ def listar_arquivo():
         print(f"arquivos: \n")
         for item in conteudo:
             print(item)
+            print("\n")
+            time.sleep(1)
+
+def ler_arquivo():
+    listar_arquivo()
+    nome_arquivo=input("insira qual arquivo deseja ler: ")
+    print("=-=-=-=-=-=-=-=-=-=") 
+    caminho_arquivo = os.path.join("arquivos", nome_arquivo)
+    try:
+        with open(caminho_arquivo, 'r') as arquivo:
+            conteudo = arquivo.read()
+            print(conteudo)
+    except FileNotFoundError:
+        print("Arquivo não encontrado.")
 
 def execução_mestre(permissão_ler, permissão_escrever, permissão_excluir):
     while True:
 
         print("=-=-=-=-=-=-=-=-=-=-=-=-=-=")
-        print("funções disponíveis: \n")
+        print("funções disponíveis:")
         print("0-listar arquivos")
         print("1-ler")
         print("2-editar")
@@ -24,20 +55,33 @@ def execução_mestre(permissão_ler, permissão_escrever, permissão_excluir):
         escolha_fc = int(input("qual função você deseja realizar?: "))
         print("=-=-=-=-=-=-=-=-=-=-=-=-=-=")
         if escolha_fc == 0:
+            time.sleep(1)
             listar_arquivo()
         elif escolha_fc == 1:
-            print("não tem nada ainda")
+            if permissão_ler==1:
+                time.sleep(1)
+                ler_arquivo()
+            else:
+                time.sleep(1)
+                print("!!você não tem permissão para executar esta função!!")
+       
         elif escolha_fc == 2:
-            print("não tem nada ainda")
+            if permissão_escrever==1:
+                print("...em desenvolvimento...")
+            else:
+                print("!!você não tem permissão para executar esta função!!")
+        
         elif escolha_fc == 3:
-            print("não tem nada ainda")
+            if permissão_excluir==1:
+                excluir_arquivo()
+            else:
+                print("!!você não tem permissão para executar esta função!!")
+       
         elif escolha_fc == 4:
             print("tchau!! :3 ...")
             break
         else:
             print("Escolha inválida. Por favor, escolha uma opção válida.")
-
-
 
 def definir_permissões(nome_usuario):
     global permissão_leitura
@@ -53,9 +97,7 @@ def definir_permissões(nome_usuario):
                 break
 
     return permissão_leitura, permissão_escrever, permissão_excluir
-            
-        
-    
+              
 def logar_usuario(nome_usuario, senha):
     with open('usuarios.txt', 'r') as login_arquivo:
         linhas = login_arquivo.readlines()
@@ -92,6 +134,8 @@ def cadastrar_usuario():
     with open('permissoes.txt', 'a') as arquivo:
         arquivo.write(f"{usuario}: {0}, {0}, {0}\n")
 
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
 while True:
 
     permissão_leitura=0
@@ -115,6 +159,7 @@ while True:
             senha_login = getpass.getpass(prompt='insira a sua senha: ', stream=None)            
             login_valido = logar_usuario(usuario_login, senha_login)
             if login_valido:
+                print("=-=-=-=-=-=-=-=-=-=-=-=-=-=")
                 print("!!LOGIN BEM SUCEDIDO!!")
                 execução_mestre(permissão_leitura,permissão_escrever,permissão_excluir)
             else:
