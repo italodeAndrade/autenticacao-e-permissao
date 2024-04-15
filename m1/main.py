@@ -1,8 +1,62 @@
 #Ítalo de Andrade Teles Ocimar Lima
 import os
 import getpass
+def listar_arquivo():
+    path=r"C:\Users\italo\Desktop\programação\segundo ano\cyber segurança\somativa\autenticacao-e-permissao\m1\arquivos"
+    if os.path.isdir(path):
 
-def login_usuario(nome_usuario, senha):
+        conteudo = os.listdir(path)
+
+        print(f"arquivos: \n")
+        for item in conteudo:
+            print(item)
+
+def execução_mestre(permissão_ler, permissão_escrever, permissão_excluir):
+    while True:
+
+        print("=-=-=-=-=-=-=-=-=-=-=-=-=-=")
+        print("funções disponíveis: \n")
+        print("0-listar arquivos")
+        print("1-ler")
+        print("2-editar")
+        print("3-excluir")
+        print("4-sair")
+        escolha_fc = int(input("qual função você deseja realizar?: "))
+        print("=-=-=-=-=-=-=-=-=-=-=-=-=-=")
+        if escolha_fc == 0:
+            listar_arquivo()
+        elif escolha_fc == 1:
+            print("não tem nada ainda")
+        elif escolha_fc == 2:
+            print("não tem nada ainda")
+        elif escolha_fc == 3:
+            print("não tem nada ainda")
+        elif escolha_fc == 4:
+            print("tchau!! :3 ...")
+            break
+        else:
+            print("Escolha inválida. Por favor, escolha uma opção válida.")
+
+
+
+def definir_permissões(nome_usuario):
+    global permissão_leitura
+    global permissão_escrever
+    global permissão_excluir    
+    with open('permissoes.txt','r') as permissoes_arquivo:
+        linhas = permissoes_arquivo.readlines()
+        for linha in linhas:
+            partes = linha.strip().split(':')
+            if partes[0] == nome_usuario:
+                permissões = partes[1].strip().split(',')
+                permissão_leitura, permissão_escrever, permissão_excluir= map(int, permissões)
+                break
+
+    return permissão_leitura, permissão_escrever, permissão_excluir
+            
+        
+    
+def logar_usuario(nome_usuario, senha):
     with open('usuarios.txt', 'r') as login_arquivo:
         linhas = login_arquivo.readlines()
         for linha in linhas:
@@ -15,6 +69,7 @@ def login_usuario(nome_usuario, senha):
                 elif 'senha' in parte:
                     senha_usuario = parte.split(':')[1].strip()
             if usuario == nome_usuario and senha_usuario == senha:
+                definir_permissões(nome_usuario)
                 return True
         return False
 
@@ -58,14 +113,15 @@ while True:
         while True:
             usuario_login = input("Insira o seu usuário: ")
             senha_login = getpass.getpass(prompt='insira a sua senha: ', stream=None)            
-            login_valido = login_usuario(usuario_login, senha_login)
+            login_valido = logar_usuario(usuario_login, senha_login)
             if login_valido:
                 print("!!LOGIN BEM SUCEDIDO!!")
-                break
+                execução_mestre(permissão_leitura,permissão_escrever,permissão_excluir)
             else:
                 print("Usuário ou senha incorretos!")
                 tentar_novamente = input("Deseja tentar novamente? (s/n): ")
                 if tentar_novamente.lower() != 's':
-                    break 
+                    break
+            break
     else:
         print("Escolha inválida. Por favor, escolha uma opção válida.")
