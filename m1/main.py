@@ -1,4 +1,5 @@
 #Ítalo de Andrade Teles Ocimar Lima
+
 import subprocess
 import time
 import os
@@ -19,7 +20,7 @@ def escrever_arquivo():
     time.sleep(1)
     print("0-sair")
     escolha_arquivo=input("qual arquivo deseja escrever? : ")
-    if escrever_arquivo==0:
+    if escrever_arquivo=='0':
         print("...")
     else:
         caminho_arquivo = os.path.join('arquivos', escolha_arquivo)
@@ -31,7 +32,7 @@ def excluir_arquivo():
     print("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
     print("0-sair")
     nome_arquivo=input("insira o nome do arquivo que deseja excluir: ")
-    if nome_arquivo==0:
+    if nome_arquivo=='0':
         print("...")
     else:
         print("=-=-=-=-=-=-=-=-=-=") 
@@ -160,7 +161,7 @@ def cadastrar_usuario():
     print("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
     print("0-sair")
     usuario = input("Insira o seu perfil de usuário: ")
-    if usuario == 0:
+    if usuario == '0':
         print("...")
     else:
         senha = getpass.getpass(prompt='insira a sua senha: ', stream=None)
