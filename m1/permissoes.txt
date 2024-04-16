@@ -1,4 +1,2 @@
-italo: 1, 1, 1
-rogerio: 0, 1, 0
-paulo: 0, 0, 0
-laura: 1, 1, 0
+italo: 1, 1, 1, 1
+otavio: 0, 0, 0, 0

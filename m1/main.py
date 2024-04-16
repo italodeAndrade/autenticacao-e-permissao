@@ -4,6 +4,16 @@ import time
 import os
 import getpass
 
+def criar_arquivo():
+    nome_arquivo=input("insira o nome do arquivo quer deseja criar: ")
+    caminho_completo=os.path.join("arquivos",nome_arquivo)
+    if not os.path.exists(caminho_completo):
+        with open(caminho_completo, 'w'):
+            pass 
+        print("!!Arquivo " ,nome_arquivo, " criado com sucesso!!")
+    else:
+        print("arquivo", caminho_completo, "já existe!")
+
 def escrever_arquivo():
     listar_arquivo()
     time.sleep(1)
@@ -63,7 +73,7 @@ def ler_arquivo():
         except FileNotFoundError:
             print("Arquivo não encontrado.")
 
-def execução_mestre(permissão_ler, permissão_escrever, permissão_excluir):
+def execução_mestre(permissão_ler, permissão_escrever, permissão_excluir,permissão_criar):
     while True:
 
         print("=-=-=-=-=-=-=-=-=-=-=-=-=-=")
@@ -72,7 +82,8 @@ def execução_mestre(permissão_ler, permissão_escrever, permissão_excluir):
         print("1-ler")
         print("2-editar")
         print("3-excluir")
-        print("4-sair")
+        print("4-criar arquivo")
+        print("5-sair")
         escolha_fc = int(input("qual função você deseja realizar?: "))
         print("=-=-=-=-=-=-=-=-=-=-=-=-=-=")
         if escolha_fc == 0:
@@ -99,6 +110,12 @@ def execução_mestre(permissão_ler, permissão_escrever, permissão_excluir):
                 print("!!você não tem permissão para executar esta função!!")
        
         elif escolha_fc == 4:
+            if permissão_criar==1:
+                criar_arquivo()
+            else:
+                print("!!você não tem permissão para executar esta função!!")
+
+        elif escolha_fc == 5:
             print("tchau!! :3 ...")
             break
         else:
@@ -107,17 +124,21 @@ def execução_mestre(permissão_ler, permissão_escrever, permissão_excluir):
 def definir_permissões(nome_usuario):
     global permissão_leitura
     global permissão_escrever
-    global permissão_excluir    
+    global permissão_excluir
+    global permissão_criar
     with open('permissoes.txt','r') as permissoes_arquivo:
         linhas = permissoes_arquivo.readlines()
         for linha in linhas:
             partes = linha.strip().split(':')
             if partes[0] == nome_usuario:
                 permissões = partes[1].strip().split(',')
-                permissão_leitura, permissão_escrever, permissão_excluir= map(int, permissões)
+                permissão_leitura, permissão_escrever, permissão_excluir, permissão_criar = map(int, permissões[:4])
                 break
 
-    return permissão_leitura, permissão_escrever, permissão_excluir
+    return permissão_leitura, permissão_escrever, permissão_excluir, permissão_criar
+
+
+    return permissão_leitura, permissão_escrever, permissão_excluir,permissão_criar
               
 def logar_usuario(nome_usuario, senha):
     with open('usuarios.txt', 'r') as login_arquivo:
@@ -132,8 +153,7 @@ def logar_usuario(nome_usuario, senha):
                 elif 'senha' in parte:
                     senha_usuario = parte.split(':')[1].strip()
             if usuario == nome_usuario and senha_usuario == senha:
-                definir_permissões(nome_usuario)
-                return True
+                return definir_permissões(nome_usuario)
         return False
 
 def cadastrar_usuario():
@@ -158,7 +178,7 @@ def cadastrar_usuario():
         with open('usuarios.txt', 'a') as arquivo:
             arquivo.write(f"usuario: {usuario}, senha: {senha}\n")
         with open('permissoes.txt', 'a') as arquivo:
-            arquivo.write(f"{usuario}: {0}, {0}, {0}\n")
+            arquivo.write(f"{usuario}: {0}, {0}, {0}, {0}\n")
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 
@@ -167,6 +187,7 @@ while True:
     permissão_leitura=0
     permissão_escrever=0
     permissão_excluir=0
+    permissão_criar=0
     print("=-=-=-=-=-=-=-=")
     print("1 - Logar")
     print("2 - Cadastrar")
@@ -187,7 +208,7 @@ while True:
             if login_valido:
                 print("=-=-=-=-=-=-=-=-=-=-=-=-=-=")
                 print("!!LOGIN BEM SUCEDIDO!!")
-                execução_mestre(permissão_leitura,permissão_escrever,permissão_excluir)
+                execução_mestre(permissão_leitura,permissão_escrever,permissão_excluir,permissão_criar)
             else:
                 print("Usuário ou senha incorretos!")
                 tentar_novamente = input("Deseja tentar novamente? (s/n): ")
