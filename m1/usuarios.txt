@@ -1,3 +1,4 @@
 usuario: italo, senha: 111
 usuario: rogerio, senha: 333
 usuario: paulo, senha: 444
+usuario: laura, senha: 00

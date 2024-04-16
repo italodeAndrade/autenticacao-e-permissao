@@ -1,21 +1,38 @@
 #Ítalo de Andrade Teles Ocimar Lima
+import subprocess
 import time
 import os
 import getpass
 
+def escrever_arquivo():
+    listar_arquivo()
+    time.sleep(1)
+    print("0-sair")
+    escolha_arquivo=input("qual arquivo deseja escrever? : ")
+    if escrever_arquivo==0:
+        print("...")
+    else:
+        caminho_arquivo = os.path.join('arquivos', escolha_arquivo)
+        subprocess.Popen(['notepad.exe',caminho_arquivo])
+
 def excluir_arquivo():
 
     listar_arquivo()
+    print("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
+    print("0-sair")
     nome_arquivo=input("insira o nome do arquivo que deseja excluir: ")
-    print("=-=-=-=-=-=-=-=-=-=") 
-    caminho_arquivo=os.path.join("arquivos",nome_arquivo)
-    if os.path.exists(caminho_arquivo):
-        os.remove(caminho_arquivo)
-        print("!!!Arquivo excluído com sucesso!!!")
-        print("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= \n")
+    if nome_arquivo==0:
+        print("...")
     else:
-        print("O arquivo não existe ou não pode ser encontrado.")
-        print("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= \n")
+        print("=-=-=-=-=-=-=-=-=-=") 
+        caminho_arquivo=os.path.join("arquivos",nome_arquivo)
+        if os.path.exists(caminho_arquivo):
+            os.remove(caminho_arquivo)
+            print("!!!Arquivo excluído com sucesso!!!")
+            print("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= \n")
+        else:
+            print("O arquivo não existe ou não pode ser encontrado.")
+            print("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= \n")
 
 def listar_arquivo():
 
@@ -32,15 +49,19 @@ def listar_arquivo():
 
 def ler_arquivo():
     listar_arquivo()
+    print("0-sair")
     nome_arquivo=input("insira qual arquivo deseja ler: ")
-    print("=-=-=-=-=-=-=-=-=-=") 
-    caminho_arquivo = os.path.join("arquivos", nome_arquivo)
-    try:
-        with open(caminho_arquivo, 'r') as arquivo:
-            conteudo = arquivo.read()
-            print(conteudo)
-    except FileNotFoundError:
-        print("Arquivo não encontrado.")
+    if nome_arquivo == 0:
+        print("...")
+    else:
+        print("=-=-=-=-=-=-=-=-=-=") 
+        caminho_arquivo = os.path.join("arquivos", nome_arquivo)
+        try:
+            with open(caminho_arquivo, 'r') as arquivo:
+                conteudo = arquivo.read()
+                print(conteudo)
+        except FileNotFoundError:
+            print("Arquivo não encontrado.")
 
 def execução_mestre(permissão_ler, permissão_escrever, permissão_excluir):
     while True:
@@ -67,7 +88,7 @@ def execução_mestre(permissão_ler, permissão_escrever, permissão_excluir):
        
         elif escolha_fc == 2:
             if permissão_escrever==1:
-                print("...em desenvolvimento...")
+                escrever_arquivo()
             else:
                 print("!!você não tem permissão para executar esta função!!")
         
@@ -116,23 +137,28 @@ def logar_usuario(nome_usuario, senha):
         return False
 
 def cadastrar_usuario():
+    print("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
+    print("0-sair")
     usuario = input("Insira o seu perfil de usuário: ")
-    senha = getpass.getpass(prompt='insira a sua senha: ', stream=None)
-    senha2 = getpass.getpass(prompt='insira novamente a sua senha: ', stream=None)
-    while senha != senha2:
-        print("=-=-=-=-=-=-=-=-=-=-=-=")
-        print("!! AS SENHAS DIGITADAS NÃO CORRESPONDEM TENTE NOVAMENTE !!")
-        print("=-=-=-=-=-=-=-=-=-=-=-=")
+    if usuario == 0:
+        print("...")
+    else:
         senha = getpass.getpass(prompt='insira a sua senha: ', stream=None)
-        senha2 = getpass.getpass(prompt='insira novamente a sua senha: ', stream=None)  
-    print("=-=-=-=-=-=-=-=-=-=-=-=")
-    print("!! CADASTRO REALIZADO COM SUCESSO !!")
-    print("=-=-=-=-=-=-=-=-=-=-=-=")
-    
-    with open('usuarios.txt', 'a') as arquivo:
-        arquivo.write(f"usuario: {usuario}, senha: {senha}\n")
-    with open('permissoes.txt', 'a') as arquivo:
-        arquivo.write(f"{usuario}: {0}, {0}, {0}\n")
+        senha2 = getpass.getpass(prompt='insira novamente a sua senha: ', stream=None)
+        while senha != senha2:
+            print("=-=-=-=-=-=-=-=-=-=-=-=")
+            print("!! AS SENHAS DIGITADAS NÃO CORRESPONDEM TENTE NOVAMENTE !!")
+            print("=-=-=-=-=-=-=-=-=-=-=-=")
+            senha = getpass.getpass(prompt='insira a sua senha: ', stream=None)
+            senha2 = getpass.getpass(prompt='insira novamente a sua senha: ', stream=None)  
+        print("=-=-=-=-=-=-=-=-=-=-=-=")
+        print("!! CADASTRO REALIZADO COM SUCESSO !!")
+        print("=-=-=-=-=-=-=-=-=-=-=-=")
+        
+        with open('usuarios.txt', 'a') as arquivo:
+            arquivo.write(f"usuario: {usuario}, senha: {senha}\n")
+        with open('permissoes.txt', 'a') as arquivo:
+            arquivo.write(f"{usuario}: {0}, {0}, {0}\n")
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 
